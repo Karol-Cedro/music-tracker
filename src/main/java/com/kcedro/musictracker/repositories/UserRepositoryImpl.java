@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository{
                 throw new AuthorizationException(" Invalid email or password");
             }
             return user;
-        }catch(EmptyResultDataAccessException e){
+        }catch(NullPointerException e){
             throw new AuthorizationException("invalid email or password");
         }
     }
