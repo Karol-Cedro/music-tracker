@@ -25,7 +25,7 @@ ALTER TABLE mt_playlist ADD CONSTRAINT play_user_fk FOREIGN KEY (user_id) REFERE
 
 CREATE TABLE mt_song(
     song_id SERIAL PRIMARY KEY NOT NULL,
-    playlist_id INTEGER NOT NULL,
+    playlist_id INTEGER DEFAULT NULL,
     user_id INTEGER NOT NULL,
     artist VARCHAR(30) NOT NULL,
     title VARCHAR(50) NOT NULL
