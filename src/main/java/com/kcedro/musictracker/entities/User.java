@@ -1,6 +1,10 @@
 package com.kcedro.musictracker.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "mt_users")
@@ -9,7 +13,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int user_id;
+    private int userId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL)
+    private List<Song> songs;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Playlist> playlists;
 
     @Column(name = "first_name")
     private String firstName;
@@ -33,12 +44,12 @@ public class User {
         this.password = password;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int user_id) {
+        this.userId = user_id;
     }
 
     public String getFirstName() {
@@ -73,14 +84,48 @@ public class User {
         this.password = password;
     }
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "user_id=" + user_id +
+                "user_id=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public void addSong(Song song){
+        if (songs == null){
+            songs = new ArrayList<>();
+        }
+
+        songs.add(song);
+        song.setUser(this);
+    }
+
+    public void addPlaylist(Playlist playlist){
+        if (playlists == null){
+            playlists = new ArrayList<>();
+        }
+
+        playlists.add(playlist);
+        playlist.setUser(this);
     }
 }

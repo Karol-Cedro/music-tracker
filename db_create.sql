@@ -14,16 +14,16 @@ CREATE TABLE mt_users(
     password text NOT NULL
 );
 
-CREATE TABLE mt_playlist(
+CREATE TABLE mt_playlists(
   playlist_id SERIAL PRIMARY KEY NOT NULL,
   user_id INTEGER NOT NULL,
   title VARCHAR(50) NOT NULL,
   description VARCHAR(80) DEFAULT NULL
 );
 
-ALTER TABLE mt_playlist ADD CONSTRAINT play_user_fk FOREIGN KEY (user_id) REFERENCES mt_users(user_id);
+ALTER TABLE mt_playlists ADD CONSTRAINT play_user_fk FOREIGN KEY (user_id) REFERENCES mt_users(user_id);
 
-CREATE TABLE mt_song(
+CREATE TABLE mt_songs(
     song_id SERIAL PRIMARY KEY NOT NULL,
     playlist_id INTEGER DEFAULT NULL,
     user_id INTEGER NOT NULL,
@@ -31,5 +31,5 @@ CREATE TABLE mt_song(
     title VARCHAR(50) NOT NULL
 );
 
-ALTER TABLE mt_song ADD CONSTRAINT song_playlist_fk FOREIGN KEY (playlist_id) REFERENCES mt_playlist(playlist_id);
-ALTER TABLE mt_song ADD CONSTRAINT song_user_fk FOREIGN KEY (user_id) REFERENCES mt_users(user_id);
+ALTER TABLE mt_songs ADD CONSTRAINT song_playlist_fk FOREIGN KEY (playlist_id) REFERENCES mt_playlists(playlist_id);
+ALTER TABLE mt_songs ADD CONSTRAINT song_user_fk FOREIGN KEY (user_id) REFERENCES mt_users(user_id);

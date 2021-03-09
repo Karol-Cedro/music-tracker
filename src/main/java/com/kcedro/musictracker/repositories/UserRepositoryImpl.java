@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository{
         try {
             User user = new User(firstName, lastName, email, hashedPassword);
             session.save(user);
-            return user.getUser_id();
+            return user.getUserId();
         }catch (Exception e){
             throw new AuthorizationException("Incorrect data. Failed to create account.");
         }
@@ -40,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository{
     public User findByEmailAndPassword(String email, String password) throws AuthorizationException {
         Session session = entityManager.unwrap(Session.class);
         try {
-            Query<User> query = session.createQuery("from User u where u.email = :email", User.class);
+            Query<User> query = session.createQuery("select u from User u where u.email = :email", User.class);
             query.setParameter("email", email);
             User user = query.uniqueResult();
             if (!BCrypt.checkpw(password, user.getPassword())) {
@@ -54,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public boolean checkIfEmailExist(String email) {
-        Query query = entityManager.unwrap(Session.class).createQuery("from User u where u.email = :email");
+        Query query = entityManager.unwrap(Session.class).createQuery("select u from User u where u.email = :email");
         query.setParameter("email",email);
         return (query.uniqueResult() !=null);
     }
