@@ -19,6 +19,7 @@ public class User {
     @OneToMany(mappedBy ="user",cascade = CascadeType.ALL)
     private List<Song> songs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Playlist> playlists;
 

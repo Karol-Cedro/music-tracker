@@ -22,14 +22,14 @@ public class SongController {
     @GetMapping
     public ResponseEntity<List<Song>> getAllSongs(HttpServletRequest request){
         int userId = (int) request.getAttribute("userId");
-        List<Song> songs = songService.getAll(userId);
+        List<Song> songs = songService.getAllSongs(userId);
         return new ResponseEntity<>(songs, HttpStatus.OK);
     }
 
     @GetMapping("/{songId}")
     public ResponseEntity<Song> getSongsById(HttpServletRequest request, @PathVariable("songId") int songId){
         int userId = (int) request.getAttribute("userId");
-        Song song = songService.getById(userId,songId);
+        Song song = songService.getSongById(userId,songId);
         return new ResponseEntity<>(song,HttpStatus.OK);
     }
 
@@ -43,7 +43,8 @@ public class SongController {
     }
 
     @PutMapping("/{songId}")
-    public ResponseEntity<Map<String,Boolean>> updateSong(HttpServletRequest request, @PathVariable("songId") int songId,@RequestBody Song song){
+    public ResponseEntity<Map<String,Boolean>> updateSong(HttpServletRequest request, @PathVariable("songId") int songId,
+                                                          @RequestBody Song song){
         int userId = (int) request.getAttribute("userId");
         songService.update(userId,songId,song);
         Map<String, Boolean>map = new HashMap<>();

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface SongRepository {
 
-    List<Song> getAll(int userId)throws ResourceNotFoundException;
+    List<Song> getAllSongs(int userId)throws ResourceNotFoundException;
 
-    Song getById(int userId,int songId) throws ResourceNotFoundException;
+    Song getSongById(int userId, int songId) throws ResourceNotFoundException;
 
     int create(int userId,String artist, String title) throws BadRequestException;
 

@@ -18,19 +18,19 @@ public class SongServiceImpl implements SongService {
     SongRepository songRepository;
 
     @Override
-    public List<Song> getAll(int userId) throws ResourceNotFoundException {
-        return songRepository.getAll(userId);
+    public List<Song> getAllSongs(int userId) throws ResourceNotFoundException {
+        return songRepository.getAllSongs(userId);
     }
 
     @Override
-    public Song getById(int userId, int songId) throws ResourceNotFoundException {
-        return songRepository.getById(userId, songId);
+    public Song getSongById(int userId, int songId) throws ResourceNotFoundException {
+        return songRepository.getSongById(userId, songId);
     }
 
     @Override
     public Song create(int userId, String artist, String title) throws BadRequestException {
         int songId = songRepository.create(userId,artist, title);
-        return songRepository.getById(userId, songId);
+        return songRepository.getSongById(userId, songId);
     }
 
     @Override

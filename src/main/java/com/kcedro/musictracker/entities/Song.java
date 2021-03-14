@@ -3,6 +3,8 @@ package com.kcedro.musictracker.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "mt_songs")
@@ -13,10 +15,14 @@ public class Song {
     @Column(name = "song_id")
     private int songId;
 
-    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    @JsonIgnore
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="playlist_id")
-    private Playlist playlist;
+    @JoinTable(name="mt_playlist_song",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "playlist_id")
+    )
+    private List<Playlist> playlists;
 
     @JsonIgnore
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
@@ -46,12 +52,12 @@ public class Song {
         this.songId = song_Id;
     }
 
-    public Playlist getPlaylist() {
-        return playlist;
+    public List<Playlist> getPlaylists() {
+        return playlists;
     }
 
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
     }
 
     public User getUser() {
@@ -82,10 +88,17 @@ public class Song {
     public String toString() {
         return "Song{" +
                 "song_Id=" + songId +
-                ", playlist=" + playlist +
+                ", playlist=" + playlists +
                 ", user=" + user +
                 ", artist='" + artist + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    public void addPlaylist(Playlist playlist){
+        if (playlists==null){
+            playlists = new ArrayList<>();
+        }
+        playlists.add(playlist);
     }
 }

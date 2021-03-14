@@ -1,5 +1,6 @@
 package com.kcedro.musictracker.repositories;
 
+import com.kcedro.musictracker.entities.Playlist;
 import com.kcedro.musictracker.entities.Song;
 import com.kcedro.musictracker.entities.User;
 import com.kcedro.musictracker.exceptions.BadRequestException;
@@ -19,7 +20,7 @@ public class SongRepositoryImpl implements SongRepository{
     private EntityManager entityManager;
 
     @Override
-    public List<Song> getAll(int userId) throws ResourceNotFoundException {
+    public List<Song> getAllSongs(int userId) throws ResourceNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         try {
             Query query = session.createQuery("select s from Song s where s.user.id = :userId");
@@ -31,7 +32,7 @@ public class SongRepositoryImpl implements SongRepository{
     }
 
     @Override
-    public Song getById(int userId, int songId) throws ResourceNotFoundException {
+    public Song getSongById(int userId, int songId) throws ResourceNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         try {
             Query query = session.createQuery("select s from Song s where s.user.id = :userId and s.id = :songId");
@@ -60,7 +61,7 @@ public class SongRepositoryImpl implements SongRepository{
     public void update(int userId, int songId, Song song) throws BadRequestException {
         Session session = entityManager.unwrap(Session.class);
         try {
-            Song song1 = getById(userId, songId);
+            Song song1 = getSongById(userId, songId);
             song1.setArtist(song.getArtist());
             song1.setTitle(song.getTitle());
             session.update(song1);
@@ -76,9 +77,17 @@ public class SongRepositoryImpl implements SongRepository{
             Song song = session.get(Song.class,songId);
             User user = session.get(User.class,userId);
             user.getSongs().remove(song);
+            this.removePlaylistConnectionsWithSongs(user,songId);
             session.delete(song);
         }catch(Exception e){
             throw  new ResourceNotFoundException("Song not found.");
+        }
+    }
+
+    public void removePlaylistConnectionsWithSongs(User user,int songId){
+        List<Playlist> playlists = user.getPlaylists();
+        for (Playlist playlist : playlists) {
+            playlist.getSongs().removeIf(song ->song.getSongId() ==songId );
         }
     }
 }
