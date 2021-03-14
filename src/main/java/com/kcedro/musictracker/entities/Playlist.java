@@ -1,6 +1,9 @@
 package com.kcedro.musictracker.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,13 +15,19 @@ public class Playlist {
     @Column(name = "playlist_id")
     private int playlistId;
 
+    @JsonIgnore
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "playlist",cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    @JsonIgnore
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name="mt_playlist_song",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
     private List<Song> songs;
 
     @Column(name = "title")
@@ -28,6 +37,11 @@ public class Playlist {
     private String description;
 
     public Playlist() {
+    }
+
+    public Playlist(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public int getPlaylistId() {
@@ -62,6 +76,14 @@ public class Playlist {
         this.description = description;
     }
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
     @Override
     public String toString() {
         return "Playlist{" +
@@ -70,5 +92,12 @@ public class Playlist {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public void addSong(Song song){
+        if (songs == null){
+            songs = new ArrayList<>();
+        }
+        songs.add(song);
     }
 }
