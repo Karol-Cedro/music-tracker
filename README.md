@@ -16,4 +16,4 @@ Simple REST API for music tracking created using:
 
 ## Screens from Postman
 
-![Alt text](/../<screenshots>/Login.png?raw=true "Optional Title")
+![image](<screenshots>/Login.png?raw=true "Optional Title")
