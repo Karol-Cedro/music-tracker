@@ -14,6 +14,12 @@ Simple REST API for music tracking created using:
 - Add or remove song from playlist.
 
 
-## Screens from Postman
-
-![image](/../<screenshots>Login.png?raw=true "Optional Title")
+## Sample Screenshots from Postman
+### Logging in.
+![image](https://github.com/Karol-Cedro/music-tracker/blob/screenshots/Login.PNG)
+### Creating new playlist.
+![image](https://github.com/Karol-Cedro/music-tracker/blob/screenshots/add%20playlist.PNG)
+### Adding song to the playlist.
+![image](https://github.com/Karol-Cedro/music-tracker/blob/screenshots/add%20song%20to%20playlist.PNG)
+### Updating song details.
+![image](https://github.com/Karol-Cedro/music-tracker/blob/screenshots/update%20song.PNG)
